@@ -8,7 +8,6 @@ from app.products import Products
 
 
 def shop_trip() -> None:
-    # with open("config.json", "r") as file:
     with open("app/config.json", "r") as file:
         data = json.load(file)
 
@@ -36,9 +35,5 @@ def shop_trip() -> None:
     for customer in Customer.customers:
         shop_to_ride = customer.check_trip_availability()
         if shop_to_ride:
-            place = [shop
-                     for shop in Shop.shops
-                     if shop.name == shop_to_ride
-                     ][0]
-            customer.get_receipt(place)
-            customer.arrive_home(place)
+            customer.get_receipt(shop_to_ride)
+            customer.arrive_home(shop_to_ride)

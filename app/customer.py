@@ -1,6 +1,6 @@
 from __future__ import annotations
 from math import dist
-from datetime import datetime
+import datetime
 from decimal import Decimal
 
 from app.car import Car
@@ -8,7 +8,7 @@ from app.shop import Shop
 from app.products import Products
 
 
-date_now = datetime(2021, 1, 4, 12, 33, 41).strftime("%d/%m/%Y %H:%M:%S")
+date_now = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
 
 class Customer:
@@ -54,18 +54,26 @@ class Customer:
             cost = self.get_trip_to_cost(shop)
             trip_cost[shop.name] = cost
             print(f"{self.name}'s trip to the {shop.name} costs {cost}")
+
         min_value = min([value for key, value in trip_cost.items()])
-        min_value_shop_name = [key
-                               for key in trip_cost.keys()
-                               if trip_cost[key] == min_value
-                               ][0]
+        chosen_shop_name = [key
+                            for key in trip_cost.keys()
+                            if trip_cost[key] == min_value
+                            ][0]
+        chosen_shop = [shop
+                       for shop in Shop.shops
+                       if shop.name == chosen_shop_name
+                       ][0]
+
         if self.money >= min_value:
-            print(f"{self.name} rides to {min_value_shop_name}\n")
+            print(f"{self.name} rides to {chosen_shop.name}\n")
+            self.money -= self.get_trip_to_cost(chosen_shop)
+            self.location = chosen_shop.location
         else:
             print(f"{self.name} doesn't have enough money "
                   f"to make a purchase in any shop")
-            min_value_shop_name = None
-        return min_value_shop_name
+            chosen_shop = None
+        return chosen_shop
 
     def get_receipt(self, shop: Shop) -> None:
         print(f"Date: {date_now}")
@@ -83,11 +91,8 @@ class Customer:
         print(f"Total cost is {self.get_product_cost(shop)} dollars")
         print("See you again!\n")
 
-    def get_remaining_money(self, shop: Shop) -> Decimal:
-        return self.money - self.get_trip_to_cost(shop)
-
     def arrive_home(self, shop: Shop) -> None:
-        if self.get_remaining_money(shop) >= 0:
+        if self.money >= 0:
             print(f"{self.name} rides home")
             print(f"{self.name} now has "
-                  f"{self.get_remaining_money(shop)} dollars\n")
+                  f"{self.money} dollars\n")
