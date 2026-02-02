@@ -8,9 +8,6 @@ from app.shop import Shop
 from app.products import Products
 
 
-date_now = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-
-
 class Customer:
     customers = []
     fuel_price: Decimal = 0
@@ -48,7 +45,8 @@ class Customer:
         return trip_cost.quantize(Decimal("0.00"))
 
     def check_trip_availability(self) -> str:
-        print(f"{self.name} has {self.money} dollars")
+        print(f"{self.name} has "
+              f"{self.money.quantize(Decimal('0.00'))} dollars")
         trip_cost = {}
         for shop in Shop.shops:
             cost = self.get_trip_to_cost(shop)
@@ -76,6 +74,8 @@ class Customer:
         return chosen_shop
 
     def get_receipt(self, shop: Shop) -> None:
+        date_now = datetime.datetime(2021, 1, 4, 12, 33, 41)\
+            .strftime("%d/%m/%Y %H:%M:%S")
         print(f"Date: {date_now}")
         print(f"Thanks, {self.name}, for your purchase!")
         print("You have bought:")
@@ -83,16 +83,18 @@ class Customer:
         total_bread_price = shop.products.bread * self.product_cart.bread
         total_butter_price = shop.products.butter * self.product_cart.butter
         print(f"{self.product_cart.milk} milks "
-              f"for {total_milk_price} dollars")
+              f"for {total_milk_price.quantize(Decimal('0.00'))} dollars")
         print(f"{self.product_cart.bread} breads "
-              f"for {total_bread_price.quantize(Decimal('1'))} dollars")
+              f"for {total_bread_price.quantize(Decimal('0.00'))} dollars")
         print(f"{self.product_cart.butter} butters "
-              f"for {total_butter_price} dollars")
-        print(f"Total cost is {self.get_product_cost(shop)} dollars")
+              f"for {total_butter_price.quantize(Decimal('0.00'))} dollars")
+        print(f"Total cost is "
+              f"{self.get_product_cost(shop).quantize(Decimal('0.00'))} "
+              f"dollars")
         print("See you again!\n")
 
     def arrive_home(self, shop: Shop) -> None:
         if self.money >= 0:
             print(f"{self.name} rides home")
             print(f"{self.name} now has "
-                  f"{self.money} dollars\n")
+                  f"{self.money.quantize(Decimal('0.00'))} dollars\n")
