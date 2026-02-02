@@ -74,8 +74,7 @@ class Customer:
         return chosen_shop
 
     def get_receipt(self, shop: Shop) -> None:
-        date_now = datetime.datetime(2021, 1, 4, 12, 33, 41)\
-            .strftime("%d/%m/%Y %H:%M:%S")
+        date_now = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         print(f"Date: {date_now}")
         print(f"Thanks, {self.name}, for your purchase!")
         print("You have bought:")
@@ -93,7 +92,7 @@ class Customer:
               f"dollars")
         print("See you again!\n")
 
-    def arrive_home(self, shop: Shop) -> None:
+    def arrive_home(self) -> None:
         if self.money >= 0:
             print(f"{self.name} rides home")
             print(f"{self.name} now has "

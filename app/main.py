@@ -36,4 +36,4 @@ def shop_trip() -> None:
         shop_to_ride = customer.check_trip_availability()
         if shop_to_ride:
             customer.get_receipt(shop_to_ride)
-            customer.arrive_home(shop_to_ride)
+            customer.arrive_home()
